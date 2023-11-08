@@ -1,4 +1,4 @@
-package org.example;
+package pl.bartoszgnatowski;
 
 import javax.swing.*;
 import java.awt.*;
