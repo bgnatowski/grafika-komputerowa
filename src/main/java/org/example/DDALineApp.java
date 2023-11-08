@@ -2,11 +2,12 @@ package org.example;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class DDALineApp extends JFrame {
 	private DDAPainter ddaPainter;
 	private JTextField startXField, startYField, endXField, endYField;
-
 	public DDALineApp() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(600, 600);
@@ -26,6 +27,19 @@ public class DDALineApp extends JFrame {
 
 		controlPanel.add(row1);
 		controlPanel.add(row2);
+		ddaPainter.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				double zoom = ddaPainter.getZoom();
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					zoom *= 1.1;
+					ddaPainter.setZoom(zoom);
+				} else if (e.getButton() == MouseEvent.BUTTON3) {
+					zoom /= 1.1;
+					ddaPainter.setZoom(zoom);
+				}
+			}
+		});
 
 		add(controlPanel, BorderLayout.NORTH);
 		add(ddaPainter, BorderLayout.CENTER);
@@ -68,7 +82,7 @@ public class DDALineApp extends JFrame {
 		endXField = new JTextField("200", 4);
 		endYField = new JTextField("200", 4);
 
-		JButton drawButton = getjButton();
+		JButton drawButton = getDrawButton();
 
 		controlPanel.add(new JLabel("Początek X:"));
 		controlPanel.add(startXField);
@@ -81,7 +95,7 @@ public class DDALineApp extends JFrame {
 		controlPanel.add(drawButton);
 	}
 
-	private JButton getjButton() {
+	private JButton getDrawButton() {
 		JButton drawButton = new JButton("Rysuj");
 		drawButton.addActionListener(e -> {
 			try {

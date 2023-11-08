@@ -8,7 +8,8 @@ class DDAPainter extends JPanel {
 	private int lineWidth = 1;
 	private boolean antialiasing = false;
 	private Color lineColor = Color.BLACK;
-
+	private double zoom = 1.0;
+//
 	public DDAPainter(int x1, int y1, int x2, int y2) {
 		this.x1 = x1;
 		this.y1 = y1;
@@ -26,6 +27,11 @@ class DDAPainter extends JPanel {
 		repaint();
 	}
 
+	public void setZoom(double zoom) {
+		this.zoom = zoom;
+		repaint();
+	}
+
 	public void setLineColor(Color lineColor) {
 		this.lineColor = lineColor;
 		repaint();
@@ -40,7 +46,12 @@ class DDAPainter extends JPanel {
 		g2d.setColor(lineColor);
 		g2d.setStroke(new BasicStroke(lineWidth));
 
-		drawLine(g2d, x1, y1, x2, y2);
+		int scaledX1 = (int) (x1 * zoom);
+		int scaledY1 = (int) (y1 * zoom);
+		int scaledX2 = (int) (x2 * zoom);
+		int scaledY2 = (int) (y2 * zoom);
+
+		drawLine(g2d, scaledX1, scaledY1, scaledX2, scaledY2);
 	}
 
 	public void setLineCoordinates(int startX, int startY, int endX, int endY) {
@@ -54,6 +65,8 @@ class DDAPainter extends JPanel {
 	public void drawLine(Graphics2D g2d, int x1, int y1, int x2, int y2) {
 		int dx = x2 - x1;
 		int dy = y2 - y1;
+
+		// długość odcinka/liczba kroków
 		int steps = Math.max(Math.abs(dx), Math.abs(dy));
 		double xIncrement = (double) dx / steps;
 		double yIncrement = (double) dy / steps;
@@ -61,15 +74,21 @@ class DDAPainter extends JPanel {
 		double y = y1;
 
 		for (int i = 0; i <= steps; i++) {
-			int xPixel = (int) Math.round(x);
+			int xPixel = (int) Math.round(x); // zaokrąglanie
 			int yPixel = (int) Math.round(y);
-			g2d.drawLine(xPixel, yPixel, xPixel, yPixel);
-			x += xIncrement;
+
+			g2d.drawLine(xPixel, yPixel, xPixel, yPixel); // wstawia pixel w konkretnych współrzędnych
+
+			x += xIncrement; // przejście na następne koordynaty
 			y += yIncrement;
 		}
 	}
 
 	public Color getLineColor() {
 		return lineColor;
+	}
+
+	public double getZoom() {
+		return zoom;
 	}
 }
