@@ -1,4 +1,4 @@
-package org.example;
+package pl.bartoszgnatowski;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,7 +46,6 @@ public class DDALineApp extends JFrame {
 
 		setVisible(true);
 	}
-
 
 	private void addLineWidthControl(JPanel controlPanel) {
 		JSlider lineWidthSlider = new JSlider(JSlider.HORIZONTAL, 1, 10, 1);
